@@ -1,3 +1,3 @@
-# 04NasAwithPm2
-加了个pm2
-再有问题就重新安装module 我发现就是module有问题
+他在 launches Jest 文件下加了一行        
+await loadPlanetsData()
+I have no idea
