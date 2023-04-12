@@ -1,0 +1,54 @@
+name: NASA Project CI
+# Controls when the action will run. Triggers the workflow on push or pull request
+# 这个on 的意思是什么时候会触发这个workflow
+# 这些在github的文档里面有介绍
+# 他这里只部署了前端
+on:
+  push:
+    branches: [ master ]
+  #        当push的时候会触发这个workflow
+  #    说句实话我应该学一下git
+  pull_request:
+    branches: [ master ]
+#        当pull_request的时候会触发这个workflow
+jobs:
+  build:
+    env:
+#      这个数据库好像名字随意写的
+      MONGODB_URL: mongo://localhost/nasa
+      CI: true //这个变量是专门和react 搭配的
+    #    这个是要匹配的乱七八糟的东西 matrix相互匹配变成矩阵
+    #    当我们设置这个matrix变量以后，我们就可以在下面的步骤中使用这个变量
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    #        这里是说到哪里安装
+#        ['4.2', '4.4', '5.0', '6.0']
+#        官方文档只支持这几个版本
+        mongodb-version: [ 4.4 ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      #              name 是可选的 告诉是哪一步
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          #          这个是设置的node的版本 在上面的matrix里面设置的
+          node-version: ${{ matrix.node-version }}
+
+      # 用mongoDB 在github的action里面 模拟我们.env file的数据库
+      #      在上面的env 中设置这个数据库的url
+      - name: Use MongoDB from github
+        uses: supercharge/mongodb-github-action@1.9.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+      #                  然后开始执行你要的步骤
+      #            这个install 是安装的你的外部
+      - run: npm install
+      #              这个install从外部调用server端
+      - run: npm run installServer
+      #              这个安装的是client端
+      - run: npm run installClient
+      - run: npm run build --prefix client
+      - run: npm run test --prefix client
+

@@ -1,0 +1,11 @@
+用这个保护你的密码、隐私乱七八糟的
+npm install dotenv --save
+在项目根目录下创建.env文件
+先安装再配置
+然后 运行项目中（server）
+加上这个
+require('dotenv').config()
+这个要加在最上面的一行
+连接mongo的数据库 mongo.js
+也要加上这个
+require('dotenv').config()

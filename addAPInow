@@ -1,0 +1,65 @@
+新建了一个/routers/api.js 把所有的api路径放进来
+
+你想用别人的api你要去他们的doc里面去看
+那里面会告诉你用法
+
+post 方法居然可以用来查询数据，
+    但是还是看那个api支不支持
+    如果支持的话就可以用post来查询数据
+
+post要查数据要用json格式
+    POST /service/function { param1 : value1, param2 : value2 }
+    当用json格式的时候好像有点类似于这种查询
+    你打出一个post的时候那边会给你返回一个post
+    所以当参数模糊的时候确实可以用这玩意来查询
+    我的理解是这样的
+
+导入axios 这玩意用来http请求的
+npm install axios
+
+什么是flatMap？
+flatMap() always returns a single, flattened array as its output
+that's correct! flatMap() will iterate through all the elements
+of the input array and apply the callback function to each element.
+这玩意直接把你的array给扁平化了
+案例一
+const data = [
+  { name: 'John', grades: [80, 90, 85] },
+  { name: 'Mary', grades: [95, 92, 88] },
+  { name: 'Bob', grades: [75, 80, 82] }
+];
+const flattenedGrades = data.flatMap(student => student.grades);
+console.log(flattenedGrades); // Output: [80, 90, 85, 95, 92, 88, 75, 80, 82]
+
+案例二
+const arr = [[1, 2], [3, 4], [5, 6]];
+const flattened = arr.flatMap(x => x);
+console.log(flattened); // Output: [1, 2, 3, 4, 5, 6]
+
+案例三
+const arr = [[1, 2], [3, 4], [5, 6]];
+const flattened = arr.flatMap(x => x);
+console.log(flattened); // Output: [1, 2, 3, 4, 5, 6]
+
+只要你callback能想办法mapping 你就能得到你要的array
+
+axios可以拿到response.data
+data之后的属性就是你自定义了
+const launchDocs = respose.data.docs
+这里的docs就是spaceX的api里面的docs
+
+ const respose = await axios.post(SPACEX_API_URL, {
+        query: {},
+        options: {
+            pagination: false,
+ 这些query,options,pagination 那里来的？
+    这些都是spaceX的api里面的 这些不是axios定义的
+    你要自己去看第一个url文档里面定义的方法
+
+        console.log(req.query)
+        // http://localhost:8000/v1/launches?limit=1&page=1
+        // 当get 请求这么写的时候实际上是加了一个query(?)问号后面的是query
+        用get 这样请求是能拿到分页 和 限制的
+        你可以用req.query拿到但是接下来你要对这个数据进行操作才能实现分页
+
+ 新建了一个query文件 来分页
